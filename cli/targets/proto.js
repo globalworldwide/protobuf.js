@@ -3,7 +3,7 @@ module.exports = proto_target;
 
 proto_target.private = true;
 
-var protobuf = require("protobufjs");
+var protobuf = require("@globalworldwide/protobufjs");
 
 var Namespace  = protobuf.Namespace,
     Enum       = protobuf.Enum,
