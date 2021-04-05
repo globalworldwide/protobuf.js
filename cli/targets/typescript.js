@@ -111,7 +111,7 @@ function buildNamespace(ref, ns) {
 
     if (ns instanceof Type)
         buildType(ref, ns);
-    else if (ns instanceof Service)
+    else if (ns instanceof Service && config.service)
         buildService(undefined, ns);
 
     if (ns.nestedArray.length > 0 && ns.name !== "") {
