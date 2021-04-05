@@ -329,6 +329,10 @@ function buildFunction(type, functionName, gen, paramMap, returnType) {
                 "($1 as any).high >>> 0"
             )
             .replace("long.toNumber()", "((long as any).toNumber())")
+            .replace(
+                /toObject\(([^,]*?), options\)/,
+                "toObject($1 as any, options)"
+            )
         );
         indent = prev;
     });
@@ -424,7 +428,7 @@ function buildType(ref, type) {
     firstField = true;
     type.fieldsArray.forEach(function(field) {
         field.resolve();
-        var jsType = toJsType(field, false);
+        var jsType = toJsType(field, true);
         if (field.optional && !field.map && !field.repeated && field.resolvedType instanceof Type)
             jsType = jsType + " | null | undefined";
         if (firstField)
@@ -479,24 +483,24 @@ function buildType(ref, type) {
         push("");
         pushComment([
             oneof.comment || type.name + " " + oneof.name + ".",
-            "@member {" + oneof.oneof.map(JSON.stringify).join("|") + "|undefined} " + escapeName(oneof.name),
+            "@member {" + oneof.oneof.map(JSON.stringify).join(" | ") + "|undefined} " + escapeName(oneof.name),
             "@memberof " + exportName(type),
             "@instance"
         ]);
-        push("get " + oneof.name + "(): string | undefined {");
+        push("get " + oneof.name + "(): " + oneof.oneof.map(JSON.stringify).join(" | ") + " | undefined {");
         ++indent;
         push("for (var keys = Object.keys(this), i = keys.length - 1; i > -1; --i)");
         ++indent;
         push("if (" + escapeName(type.name) +"." + oneof.name + "FieldMap[keys[i]] === 1 && (this as any)[keys[i]] != null)");
         ++indent;
-        push("return keys[i];");
+        push("return keys[i] as any;");
         --indent;
         --indent;
         push("return undefined;");
         --indent;
         push("}");
 
-        push("set " + oneof.name + "(name: string | undefined) {");
+        push("set " + oneof.name + "(name: " + oneof.oneof.map(JSON.stringify).join(" | ") + " | undefined) {");
         ++indent;
         push("for (var i = 0; i < " + escapeName(type.name) + "." + oneof.name + "FieldNames.length; ++i)");
         ++indent;
