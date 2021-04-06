@@ -428,7 +428,7 @@ function buildType(ref, type) {
     firstField = true;
     type.fieldsArray.forEach(function(field) {
         field.resolve();
-        var jsType = toJsType(field, false);
+        var jsType = toJsType(field, true);
         var isOptional = field.optional && !field.map && !field.repeated && field.resolvedType instanceof Type
         if (firstField)
             firstField = false;
