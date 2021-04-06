@@ -428,9 +428,8 @@ function buildType(ref, type) {
     firstField = true;
     type.fieldsArray.forEach(function(field) {
         field.resolve();
-        var jsType = toJsType(field, true);
-        if (field.optional && !field.map && !field.repeated && field.resolvedType instanceof Type)
-            jsType = jsType + " | null | undefined";
+        var jsType = toJsType(field, false);
+        var isOptional = field.optional && !field.map && !field.repeated && field.resolvedType instanceof Type
         if (firstField)
             firstField = false;
         else
@@ -441,7 +440,7 @@ function buildType(ref, type) {
             ]);
         }
         var prop = safePropName(field.name);
-        push("public " + prop + "!: " + jsType);
+        push("public " + prop + (isOptional ? "?" : "!") + ": " + jsType + (isOptional ? " | null" : ""));
     });
 
     var paramMap = {};
