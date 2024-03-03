@@ -30,7 +30,7 @@ function typescript(root, options, callback) {
         aliases.push("util");
         if (aliases.length) {
             push("/* eslint-disable */");
-            push("import * as $protobuf from \"@globalworldwide/protobufjs/minimal\"");
+            push("import * as $protobuf from \"@globalworldwide/protobufjs/minimal.js\"");
             push("import Long from \"long\"");
             if (config.comments)
                 push("// Common aliases");
