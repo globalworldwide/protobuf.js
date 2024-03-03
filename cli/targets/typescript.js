@@ -441,7 +441,7 @@ function buildType(ref, type) {
             ]);
         }
         var prop = safePropName(field.name);
-        push("public " + prop + (isOptional ? "?" : "!") + ": " + jsType + (isOptional ? " | null" : ""));
+        push("public declare " + prop + (isOptional ? "?" : "") + ": " + jsType + (isOptional ? " | null" : ""));
     });
 
     var paramMap = {};
